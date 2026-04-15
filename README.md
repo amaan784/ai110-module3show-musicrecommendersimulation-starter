@@ -17,17 +17,38 @@ Replace this paragraph with your own summary of what your version does.
 
 ## How The System Works
 
-Explain your design in plain language.
+Real-world recommenders (like Spotify and YouTube) usually combine collaborative filtering (learning from patterns across many users, such as plays, likes, skips, and playlist adds) with content-based filtering (matching item attributes, such as genre, mood, energy, and tempo). This simulation prioritizes content-based matching so the scoring logic stays transparent: songs get higher scores when they are closer to a user's target vibe, then the highest-scoring songs are ranked and returned.
 
-Some prompts to answer:
+Song features used in this simulation:
+- id
+- title
+- artist
+- genre
+- mood
+- energy
+- tempo_bpm
+- valence
+- danceability
+- acousticness
 
-- What features does each `Song` use in your system
-  - For example: genre, mood, energy, tempo
-- What information does your `UserProfile` store
-- How does your `Recommender` compute a score for each song
-- How do you choose which songs to recommend
+UserProfile features used in this simulation:
+- favorite_genre
+- favorite_mood
+- target_energy
+- likes_acoustic
 
-You can include a simple diagram or bullet list if helpful.
+Algorithm Recipe (scoring then ranking):
+- Start each song at score 0.
+- Add a strong bonus if genre matches favorite_genre.
+- Add a medium bonus if mood matches favorite_mood.
+- Add a closeness score for energy using distance from target_energy (closer is better, exact match gets maximum points).
+- Add or subtract a small acousticness bonus based on likes_acoustic.
+- Optional tie-breakers can use valence, danceability, and tempo_bpm to improve vibe fit.
+- Sort songs by final score in descending order and return the top k.
+
+Why both rules matter:
+- Scoring Rule: evaluates one song against one user and produces a comparable number.
+- Ranking Rule: sorts all scored songs and decides which items appear in the final recommendation list.
 
 ---
 
