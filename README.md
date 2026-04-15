@@ -37,14 +37,17 @@ UserProfile features used in this simulation:
 - target_energy
 - likes_acoustic
 
-Algorithm Recipe (scoring then ranking):
+Algorithm Recipe (finalized scoring then ranking):
 - Start each song at score 0.
-- Add a strong bonus if genre matches favorite_genre.
-- Add a medium bonus if mood matches favorite_mood.
-- Add a closeness score for energy using distance from target_energy (closer is better, exact match gets maximum points).
-- Add or subtract a small acousticness bonus based on likes_acoustic.
-- Optional tie-breakers can use valence, danceability, and tempo_bpm to improve vibe fit.
-- Sort songs by final score in descending order and return the top k.
+- Add 2.0 points if genre matches favorite_genre.
+- Add 1.0 point if mood matches favorite_mood.
+- Add energy similarity points with: 1.5 * (1.0 - abs(song_energy - target_energy)).
+- Add a small acousticness preference bonus: +0.5 if likes_acoustic matches the song style, otherwise +0.0.
+- Use valence, danceability, and tempo_bpm as optional tie-breakers for close scores.
+- Sort songs by final score in descending order and return the top k songs.
+
+Potential bias note:
+- This system may over-prioritize genre because genre match has the largest fixed bonus, which can hide strong cross-genre mood matches that a listener might still enjoy.
 
 Why both rules matter:
 - Scoring Rule: evaluates one song against one user and produces a comparable number.
